@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Game</title>
+  <style>
+    /* Styles for the game */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f1f1f1;
+      font-family: Arial, sans-serif;
+    }
+
+    #game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #score {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    #game {
+      width: 300px;
+      height: 300px;
+      border: 2px solid #333;
+      position: relative;
+      overflow: hidden;
+      background-color: #fff;
+    }
+
+    .target {
+      width: 50px;
+      height: 50px;
+      background-color: #f00;
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: all 0.2s ease;
+    }
+
+    .target:hover {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="game-container">
+    <h1>Click the Targets!</h1>
+    <p id="score">Score: 0</p>
+    <div id="game"></div>
+  </div>
+
+  <script>
+    // Game logic
+    var gameContainer = document.getElementById('game');
+    var scoreElement = document.getElementById('score');
+    var score = 0;
+
+    function createTarget() {
+      var target = document.createElement('div');
+      target.className = 'target';
+      target.style.top = Math.random() * (gameContainer.offsetHeight - 50) + 'px';
+      target.style.left = Math.random() * (gameContainer.offsetWidth - 50) + 'px';
+
+      target.addEventListener('click', function() {
+        score++;
+        scoreElement.textContent = 'Score: ' + score;
+        gameContainer.removeChild(target);
+      });
+
+      return target;
+    }
+
+    function startGame() {
+      setInterval(function() {
+        var target = createTarget();
+        gameContainer.appendChild(target);
+
+        setTimeout(function() {
+          gameContainer.removeChild(target);
+        }, 2000);
+      }, 1000);
+    }
+
+    startGame();
+  </script>
+</body>
+
+</html>
