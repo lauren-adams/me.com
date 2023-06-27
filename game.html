@@ -51,6 +51,10 @@
     .target:hover {
       transform: scale(1.2);
     }
+
+    #timer {
+      font-size: 24px;
+    }
   </style>
 </head>
 
@@ -59,13 +63,19 @@
     <h1>Click the Targets!</h1>
     <p id="score">Score: 0</p>
     <div id="game"></div>
+    <p id="timer">Time Left: <span id="time-left">10</span> seconds</p>
   </div>
 
   <script>
     // Game logic
     var gameContainer = document.getElementById('game');
     var scoreElement = document.getElementById('score');
+    var timerElement = document.getElementById('timer');
+    var timeLeftElement = document.getElementById('time-left');
     var score = 0;
+    var timeLeft = 10;
+    var targetInterval;
+    var timerInterval;
 
     function createTarget() {
       var target = document.createElement('div');
@@ -83,7 +93,7 @@
     }
 
     function startGame() {
-      setInterval(function() {
+      targetInterval = setInterval(function() {
         var target = createTarget();
         gameContainer.appendChild(target);
 
@@ -91,8 +101,30 @@
           gameContainer.removeChild(target);
         }, 2000);
       }, 1000);
+
+      timerInterval = setInterval(function() {
+        timeLeft--;
+        timeLeftElement.textContent = timeLeft;
+
+        if (timeLeft === 0) {
+          endGame();
+        }
+      }, 1000);
     }
 
+    function endGame() {
+      clearInterval(targetInterval);
+      clearInterval(timerInterval);
+      gameContainer.innerHTML = '';
+
+      if (score >= 10) {
+        gameContainer.innerHTML = '<h2>Congratulations! You won!</h2>';
+      } else {
+        gameContainer.innerHTML = '<h2>Game Over! You lost!</h2>';
+      }
+    }
+
+    // Initial game start
     startGame();
   </script>
 </body>
